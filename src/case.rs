@@ -4,12 +4,12 @@
  * Created Date: Fr Jun 2026, 11:21:07 pm                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Wednesday, July 1st 2026, 5:37:05 pm                         *
+ * Last Modified: Wednesday, July 1st 2026, 6:02:02 pm                         *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
 
-use crate::Grid;
+use crate::grid::Grid;
 
 pub struct Case {
     carre: Vec<u32>,
@@ -19,13 +19,14 @@ pub struct Case {
 }
 
 impl Case {
-    pub fn new(_value: u32) -> Self {
-        Self {
-            carre: vec![0, 0, 0, 0, 0, 0, 0, 0],
-            line_h: vec![0, 0, 0, 0, 0, 0, 0, 0],
-            line_v: vec![0, 0, 0, 0, 0, 0, 0, 0],
-            value: _value,
-        }
+    pub fn new(grid: &Grid, id_case:u32) -> Self {
+        self.fill(grid, id_case);
+        self
+    }
+
+    pub fn change_case(&mut self, grid: &Grid, id_case:u32) {
+        self.clear();
+        self.fill(grid, id_case);
     }
 
     pub fn get_all_carre(&self) -> Vec<u32> {
@@ -56,7 +57,7 @@ impl Case {
         self.value
     }
 
-    pub fn fill(&mut self, grid: &Grid, id_case: u32) {
+    fn fill(&mut self, grid: &Grid, id_case: u32) {
         self.value = grid.get_case(id_case as usize);
         self.fill_col(grid, id_case);
         self.fill_line(grid, id_case);
@@ -64,7 +65,7 @@ impl Case {
     }
 
     fn fill_col(&mut self, grid: &Grid, id_case: u32) {
-        let mut col:u32 = id_case % 9;
+        let col:u32 = id_case % 9;
 
         // je récupère toute les valeurs de la même colonne
         for i in 0..9 {
@@ -75,7 +76,7 @@ impl Case {
     }
 
     fn fill_line(&mut self, grid: &Grid, id_case: u32) {
-        let mut line:u32 = id_case / 9;
+        let line:u32 = id_case / 9;
 
         // je récupère toute les valeurs de la même ligne 
         for i in 0..9 {
@@ -86,8 +87,8 @@ impl Case {
     }
 
     fn fill_carre(&mut self, grid: &Grid, id_case: u32) {
-        let mut col:u32 = id_case % 9;
-        let mut line:u32 = id_case / 9;
+        let col:u32 = id_case % 9;
+        let line:u32 = id_case / 9;
 
         // je récupère toute les valeurs du même carré 
         for i in 0..81 {
@@ -95,5 +96,12 @@ impl Case {
                 self.carre.push(grid.get_case(i as usize));
             }
         }
-    } 
+    }
+
+    fn clear(&mut self) {
+        self.carre.clear();
+        self.line_h.clear();
+        self.line_v.clear();
+        self.value = 0;
+    }
 }
