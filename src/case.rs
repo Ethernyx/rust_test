@@ -4,10 +4,12 @@
  * Created Date: Fr Jun 2026, 11:21:07 pm                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Wednesday, July 1st 2026, 5:19:25 pm                         *
+ * Last Modified: Wednesday, July 1st 2026, 5:37:05 pm                         *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
+
+use crate::Grid;
 
 pub struct Case {
     carre: Vec<u32>,
@@ -38,15 +40,15 @@ impl Case {
         self.line_v.clone()
     }
 
-     pub fn get_carre(&self, id:u32) -> u32 {
+     pub fn get_carre(&self, id:usize) -> u32 {
         self.carre[id]
     }
 
-    pub fn get_line_h(&self, id:u32) -> u32 {
+    pub fn get_line_h(&self, id:usize) -> u32 {
         self.line_h[id]
     }
 
-    pub fn get_line_v(&self, id:u32) -> u32 {
+    pub fn get_line_v(&self, id:usize) -> u32 {
         self.line_v[id]
     }
 
@@ -55,7 +57,7 @@ impl Case {
     }
 
     pub fn fill(&mut self, grid: &Grid, id_case: u32) {
-        self.value = grid[id_case];
+        self.value = grid.get_case(id_case as usize);
         self.fill_col(grid, id_case);
         self.fill_line(grid, id_case);
         self.fill_carre(grid, id_case);
@@ -67,7 +69,7 @@ impl Case {
         // je récupère toute les valeurs de la même colonne
         for i in 0..9 {
             if id_case != i * 9 + col {
-                self.line_v.push(grid.get_case(i * 9 + col));
+                self.line_v.push(grid.get_case((i * 9 + col) as usize));
             }
         }
     }
@@ -78,7 +80,7 @@ impl Case {
         // je récupère toute les valeurs de la même ligne 
         for i in 0..9 {
             if id_case != line * 9 + i {
-                self.line_h.push(grid.get_case(line * 9 + i));
+                self.line_h.push(grid.get_case((line * 9 + i) as usize));
             }
         }
     }
@@ -90,7 +92,7 @@ impl Case {
         // je récupère toute les valeurs du même carré 
         for i in 0..81 {
             if (i / 9) / 3 == line / 3 && (i % 9) / 3 == col / 3 && i != id_case {
-                self.carre.push(grid.get_case(i));
+                self.carre.push(grid.get_case(i as usize));
             }
         }
     } 
