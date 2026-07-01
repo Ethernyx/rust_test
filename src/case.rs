@@ -4,15 +4,15 @@
  * Created Date: Fr Jun 2026, 11:21:07 pm                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Wednesday, July 1st 2026, 5:05:31 pm                         *
+ * Last Modified: Wednesday, July 1st 2026, 5:13:24 pm                         *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
 
 pub struct Case {
-    carre: Vec,
-    line_h: Vec,
-    line_v: Vec,
+    carre: Vec<u32>,
+    line_h: Vec<u32>,
+    line_v: Vec<u32>,
     value: u32,
 }
 
@@ -26,15 +26,15 @@ impl Case {
         }
     }
 
-    pub fn get_carre(&self) -> [u32; 8] {
+    pub fn get_carre(&self) -> Vec<u32> {
         self.carre
     }
 
-    pub fn et_line_h(&self) -> [u32; 8] {
+    pub fn et_line_h(&self) -> Vec<u32> {
         self.line_h
     }
 
-    pub fn get_line_v(&self) -> [u32; 8] {
+    pub fn get_line_v(&self) -> Vec<u32> {
         self.line_v
     }
 
@@ -46,15 +46,16 @@ impl Case {
         self.value = grid[id_case];
         self.fill_col(grid, id_case);
         self.fill_line(grid, id_case);
+        self.fill_carre(grid, id_case);
     }
 
     fn fill_col(&mut self, grid: Grid, id_case: u32) {
         let mut col:u32 = id_case % 9;
 
         // je récupère toute les valeurs de la même colonne
-        for let mut i:u32 = 0; i < 9; i++ {
-            if id_case != line * 9 + i {
-                self.line_h.push(grid[line * 9 + i]);
+        for i in 0..9 {
+            if id_case != i * 9 + col {
+                self.line_v.push(grid.get_case(i * 9 + col));
             }
         }
     }
@@ -63,9 +64,9 @@ impl Case {
         let mut line:u32 = id_case / 9;
 
         // je récupère toute les valeurs de la même ligne 
-        for let mut i:u32 = 0; i < 9; i++ {
-            if id_case != i * 9 + col {
-                self.line_v.push(grid[i * 9 + col]);
+        for i in 0..9 {
+            if id_case != line * 9 + i {
+                self.line_h.push(grid.get_case(line * 9 + i));
             }
         }
     }
@@ -75,9 +76,9 @@ impl Case {
         let mut line:u32 = id_case / 9;
 
         // je récupère toute les valeurs du même carré 
-        for let mut i:u32 = 0; i < 81; i++ {
+        for i in 0..81 {
             if (i / 9) / 3 == line / 3 && (i % 9) / 3 == col / 3 && i != id_case {
-                self.carre.push(grid[i]);
+                self.carre.push(grid.get_case(i));
             }
         }
     } 
