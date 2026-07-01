@@ -4,7 +4,7 @@
  * Created Date: Fr Jun 2026, 11:21:32 pm                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Wednesday, July 1st 2026, 5:10:34 pm                         *
+ * Last Modified: Wednesday, July 1st 2026, 5:17:21 pm                         *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
@@ -24,7 +24,7 @@ impl Grid {
         }
     }
 
-    pub fn get_case(&self, id: u32) -> u32 {
+    pub fn get_all_case(&self, id: u32) -> u32 {
         self.case[id]
     }
 

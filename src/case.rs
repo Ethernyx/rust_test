@@ -4,7 +4,7 @@
  * Created Date: Fr Jun 2026, 11:21:07 pm                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Wednesday, July 1st 2026, 5:13:24 pm                         *
+ * Last Modified: Wednesday, July 1st 2026, 5:19:25 pm                         *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
@@ -26,30 +26,42 @@ impl Case {
         }
     }
 
-    pub fn get_carre(&self) -> Vec<u32> {
-        self.carre
+    pub fn get_all_carre(&self) -> Vec<u32> {
+        self.carre.clone()
     }
 
-    pub fn et_line_h(&self) -> Vec<u32> {
-        self.line_h
+    pub fn get_all_line_h(&self) -> Vec<u32> {
+        self.line_h.clone()
     }
 
-    pub fn get_line_v(&self) -> Vec<u32> {
-        self.line_v
+    pub fn get_all_line_v(&self) -> Vec<u32> {
+        self.line_v.clone()
+    }
+
+     pub fn get_carre(&self, id:u32) -> u32 {
+        self.carre[id]
+    }
+
+    pub fn get_line_h(&self, id:u32) -> u32 {
+        self.line_h[id]
+    }
+
+    pub fn get_line_v(&self, id:u32) -> u32 {
+        self.line_v[id]
     }
 
     pub fn get_value(&self) -> u32 {
         self.value
     }
 
-    pub fn fill(&mut self, grid: Grid, id_case: u32) {
+    pub fn fill(&mut self, grid: &Grid, id_case: u32) {
         self.value = grid[id_case];
         self.fill_col(grid, id_case);
         self.fill_line(grid, id_case);
         self.fill_carre(grid, id_case);
     }
 
-    fn fill_col(&mut self, grid: Grid, id_case: u32) {
+    fn fill_col(&mut self, grid: &Grid, id_case: u32) {
         let mut col:u32 = id_case % 9;
 
         // je récupère toute les valeurs de la même colonne
@@ -60,7 +72,7 @@ impl Case {
         }
     }
 
-    fn fill_line(&mut self, grid: Grid, id_case: u32) {
+    fn fill_line(&mut self, grid: &Grid, id_case: u32) {
         let mut line:u32 = id_case / 9;
 
         // je récupère toute les valeurs de la même ligne 
@@ -71,7 +83,7 @@ impl Case {
         }
     }
 
-    fn fill_carre(&mut self, grid: Grid, id_case: u32) {
+    fn fill_carre(&mut self, grid: &Grid, id_case: u32) {
         let mut col:u32 = id_case % 9;
         let mut line:u32 = id_case / 9;
 
