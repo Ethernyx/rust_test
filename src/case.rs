@@ -4,7 +4,7 @@
  * Created Date: Fr Jun 2026, 11:21:07 pm                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Wednesday, July 1st 2026, 6:02:02 pm                         *
+ * Last Modified: Wednesday, July 1st 2026, 6:04:50 pm                         *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
@@ -20,8 +20,14 @@ pub struct Case {
 
 impl Case {
     pub fn new(grid: &Grid, id_case:u32) -> Self {
-        self.fill(grid, id_case);
-        self
+        let mut case = Self {
+            carre: Vec::new(),
+            line_h: Vec::new(),
+            line_v: Vec::new(),
+            value: 0,
+        };
+        case.fill(grid, id_case);
+        case
     }
 
     pub fn change_case(&mut self, grid: &Grid, id_case:u32) {
