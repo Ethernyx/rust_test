@@ -4,12 +4,12 @@
  * Created Date: Fr Jun 2026, 11:21:07 pm                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Friday, June 26th 2026, 11:21:22 pm                          *
+ * Last Modified: Wednesday, July 1st 2026, 3:44:36 pm                         *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
 
-struct Case {
+pub struct Case {
     carre: [u32; 8],
     line_h: [u32; 8],
     line_v: [u32; 8],
@@ -17,7 +17,7 @@ struct Case {
 }
 
 impl Case {
-    fn new(_value: u32) -> Self {
+    pub fn new(_value: u32) -> Self {
         Self {
             carre: [0; 8],
             line_h: [0; 8],
