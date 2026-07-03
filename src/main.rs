@@ -4,7 +4,7 @@
  * Created Date: Fr Jun 2026, 10:12:27 am                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Friday, July 3rd 2026, 5:04:11 pm                            *
+ * Last Modified: Friday, July 3rd 2026, 5:56:59 pm                            *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
@@ -28,17 +28,16 @@ fn main() {
     while !grid.is_complete() || grid.is_blocked() {
         grid.set_blocked(true);
         for i in 0..81 {
-            if grid.get_case(i).get_value() == 0 {
-                possibility.clear();
-                for j in 1..=9 {
+            if grid.get_value(i as usize) == 0 {
+                for j in grid.get_case(i).get_all_possibility() {
                     if !grid.get_case(i).get_all_carre().contains(&j) 
                     && !grid.get_case(i).get_all_line_h().contains(&j) 
                     && !grid.get_case(i).get_all_line_v().contains(&j) {
                         grid.get_case(i).get_all_possibility().push(j);
                     }
                 }
-                if grid.get_case(i).get_all_possibility().len() == 1 {
-                    grid.get_case(i as usize).change_case(grid, possibility[0]);
+                if grid.get_case(i as usize).get_all_possibility().len() == 1 {
+                    grid.set_value(i, grid.get_case(i as usize).get_possibility(0));
                     grid.set_blocked(false);
                     grid.check_complete();
                 }
@@ -46,8 +45,9 @@ fn main() {
             if grid.is_complete() { break; }
         }
     }
+
     let mut code = "";
-    for (id, case) in grid.get_all_case().iter().enumerate() {
+    for (id, case) in grid.get_all_values().iter().enumerate() {
         if id % 9 == 0 && (id / 9) % 3 == 0 && id != 0 { print!("|\n-------------------------------\n"); }
         else if id % 9 == 0 && (id / 9) % 3 == 0 { print!("\n-------------------------------\n"); }
         else if id % 9 == 0 { print!("|\n"); }
