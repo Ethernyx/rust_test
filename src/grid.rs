@@ -4,7 +4,7 @@
  * Created Date: Fr Jun 2026, 11:21:32 pm                                      *
  * Author: LALIN Romain                                                        *
  * -----                                                                       *
- * Last Modified: Friday, July 3rd 2026, 6:00:30 pm                            *
+ * Last Modified: Monday, July 6th 2026, 10:28:14 am                           *
  * By: LALIN Romain                                                            *
  * ----------	---	---------------------------------------------------------  *
 */
@@ -26,17 +26,16 @@ impl Grid {
             is_complete: false,
             is_blocked: true,
         };
-        for value in grid {
-            my_grid.case.push(Case::new(value));
+        let snapshot = my_grid.values.clone();
+        for id in 0..my_grid.case.len() {
+            my_grid.case[id].change_case(&snapshot, id as u32);
         }
-        for (id, case) in my_grid.get_all_case().iter().enumerate() {
-            case.change_case(&(my_grid.get_all_values()), id as u32)
-        }
+
         my_grid
     }
 
-    pub fn get_case(&self, id: usize) -> Case {
-        self.case.clone()[id]
+    pub fn get_case(&self, id: usize) -> &Case {
+        &self.case[id]
     }
 
     pub fn get_all_case(&self) -> Vec<Case> {
@@ -48,13 +47,26 @@ impl Grid {
     }
 
     pub fn get_value(&self, id:usize) -> u32 {
-        self.values.clone()[id]
+        self.values[id]
     }
 
-    fn set_value(&mut self, id: usize, value:u32) {
+    pub fn set_value(&mut self, id: usize, value:u32) {
         self.values[id] = value;
-        self.get_case(id).set_value(value);
-        if value != 0 { self.get_case(id).get_all_possibility().clear(); }
+        self.case[id].set_value(value);
+
+         // recalcule uniquement les cases impactées (même ligne, colonne ou carré)
+        let snapshot = self.values.clone();
+        for other_id in 0..self.case.len() {
+            if Self::affects(id, other_id) {
+                self.case[other_id].change_case(&snapshot, other_id as u32);
+            }
+        }
+    }
+
+    fn affects(changed_id: usize, other_id: usize) -> bool {
+        let (l1, c1) = (changed_id / 9, changed_id % 9);
+        let (l2, c2) = (other_id / 9, other_id % 9);
+        l1 == l2 || c1 == c2 || (l1 / 3 == l2 / 3 && c1 / 3 == c2 / 3)
     }
 
     pub fn is_complete(&self) -> bool {
@@ -74,13 +86,8 @@ impl Grid {
     }
 
     pub fn check_complete(&mut self) -> bool {
-        for c in self.values.clone() {
-            if c == 0 {
-                self.set_complete(false);
-                return false;
-            }
-        }
-        self.set_complete(true);
-        true
+        let complete = self.values.iter().all(|&v| v != 0);
+        self.set_complete(complete);
+        complete
     }
 }
